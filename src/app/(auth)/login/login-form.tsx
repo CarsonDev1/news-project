@@ -92,22 +92,25 @@ const LoginForm = () => {
 							{loading ? 'Logging in...' : 'LOGIN'}
 						</Button>
 					</div>
+					<div className='mt-6 text-center text-white border-t border-gray-700 pt-4'>
+						<p className='mb-2'>
+							New to Mayflix?{' '}
+							<a href='/register' className='text-blue-400 underline hover:text-blue-300'>
+								Sign up now.
+							</a>
+						</p>
+						<p className='text-sm'>
+							This page is protected by Google reCAPTCHA to ensure you're not a bot.{' '}
+							<a
+								href='https://www.google.com/recaptcha'
+								className='text-blue-400 underline hover:text-blue-300'
+							>
+								Learn more.
+							</a>
+						</p>
+					</div>
 				</div>
 			</form>
-			<div className='mt-4 text-center text-white'>
-				<p>
-					New to Mayflix?{' '}
-					<a href='/register' className='text-blue-400 underline'>
-						Sign up now.
-					</a>
-				</p>
-				<p>
-					This page is protected by Google reCAPTCHA to ensure you're not a bot.{' '}
-					<a href='https://www.google.com/recaptcha' className='text-blue-400 underline'>
-						Learn more.
-					</a>
-				</p>
-			</div>
 		</div>
 	);
 };

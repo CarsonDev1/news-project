@@ -131,7 +131,7 @@ const BannerSlide = () => {
 							<div
 								key={index}
 								onClick={() => showSlider(index)}
-								className={`cursor-pointer flex-shrink-0 w-36 h-56 relative transition-all duration-500 ${
+								className={`cursor-pointer flex-shrink-0 w-48 h-56 relative transition-all duration-500 ${
 									index === itemActive ? 'brightness-150' : 'brightness-50'
 								}`}
 							>

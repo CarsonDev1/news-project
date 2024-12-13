@@ -1,22 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaPlay, FaList, FaStar } from 'react-icons/fa';
-import { getMovies } from '@/api/movies/routes';
-import { getMovieSlug } from '@/api/movies/[slug]/route';
+import Link from 'next/link';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-const BannerSlide = () => {
+const BannerSlide = ({ moviesData, movieDetails }: any) => {
 	const [itemActive, setItemActive] = useState<number>(0);
-	const [page, setPage] = useState<number>(1);
-
-	const {
-		data: moviesData,
-		isLoading,
-		isError,
-	} = useQuery({
-		queryKey: ['movies', page],
-		queryFn: () => getMovies(page),
-	});
 
 	const items = moviesData?.items
 		?.filter((item: any) => item.year)
@@ -37,16 +27,6 @@ const BannerSlide = () => {
 		setItemActive(index);
 	};
 
-	const {
-		data: movieDetails,
-		isLoading: movieLoading,
-		isError: movieError,
-	} = useQuery({
-		queryKey: ['movieDetails', items?.[itemActive]?.slug],
-		queryFn: () => getMovieSlug(items?.[itemActive]?.slug),
-		enabled: !!items?.[itemActive]?.slug,
-	});
-
 	useEffect(() => {
 		if (moviesData) {
 			const interval = setInterval(() => {
@@ -56,18 +36,6 @@ const BannerSlide = () => {
 			return () => clearInterval(interval);
 		}
 	}, [itemActive, moviesData]);
-
-	if (isLoading) {
-		return (
-			<div className='flex justify-center items-center h-96 w-full bg-black'>
-				<Image src='/loading.gif' width={200} height={200} alt='loading' className='object-contain' />
-			</div>
-		);
-	}
-
-	if (isError || movieError) {
-		return <div>Error fetching movie details</div>;
-	}
 
 	return (
 		<div>
@@ -91,15 +59,15 @@ const BannerSlide = () => {
 									quality={100}
 								/>
 								<div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
-								<div className='absolute top-1/4 left-28 z-10 text-left space-y-4'>
-									<span className='px-3 py-1 text-xl bg-red-600 rounded-md'>
+								<div className='absolute top-1/4 left-10 sm:left-20 md:left-28 lg:left-32 z-10 text-left flex flex-col justify-between h-72'>
+									<span className='px-3 py-1 text-xl bg-red-600 rounded-md w-fit'>
 										{movieDetails?.movie?.episode_total?.replace('Tập', '')} Tập
 									</span>
-									<h2 className='text-3xl md:text-5xl font-bold leading-3'>
+									<h2 className='text-3xl sm:text-4xl md:text-5xl font-bold leading-3'>
 										{item.name} {item.tmdb.season && <span>(Season {item.tmdb.season})</span>}
 									</h2>
 									<p
-										className='w-[70rem] line-clamp-4'
+										className='w-full line-clamp-3'
 										dangerouslySetInnerHTML={{ __html: movieDetails?.movie?.content }}
 									/>
 									{item.tmdb.vote_average > 0 && (
@@ -110,10 +78,12 @@ const BannerSlide = () => {
 									)}
 
 									<div className='flex space-x-4 mt-4'>
-										<button className='flex gap-3 items-center bg-white text-black font-bold py-3 px-6 rounded'>
-											<FaPlay />
-											<span>Play</span>
-										</button>
+										<Link href={`/product-list/${item.slug}`} passHref>
+											<button className='flex gap-3 items-center bg-white text-black font-bold py-3 px-6 rounded'>
+												<FaPlay />
+												<span>Play</span>
+											</button>
+										</Link>
 										<button className='flex gap-3 items-center bg-white/20 text-white font-bold py-3 px-6 rounded'>
 											<FaList /> My List
 										</button>
@@ -124,7 +94,7 @@ const BannerSlide = () => {
 					</div>
 
 					{/* Arrow Buttons */}
-					<div className='absolute top-1/4 right-28 z-20 flex space-x-4'>
+					<div className='absolute top-1/4 right-10 sm:right-14 md:right-20 lg:right-28 z-20 flex space-x-4'>
 						<button
 							onClick={prev}
 							className='w-10 h-10 bg-gray-500 hover:bg-gray-300 text-white font-bold rounded-lg'
@@ -140,27 +110,63 @@ const BannerSlide = () => {
 					</div>
 
 					{/* Thumbnail */}
-					<div className='absolute bottom-28 w-full flex justify-center space-x-4 overflow-auto px-8 z-10'>
-						{items?.map((item: any, index: any) => (
-							<div
-								key={index}
-								onClick={() => showSlider(index)}
-								className={`cursor-pointer flex-shrink-0 w-48 h-56 relative transition-all duration-500 ${
-									index === itemActive ? 'brightness-150' : 'brightness-50'
-								}`}
-							>
-								<span className='absolute top-1 left-1 px-2 py-1 text-sm bg-red-600 text-white rounded-md'>
-									Nổi bật
-								</span>
-								<Image
-									src={`https://img.ophim.live/uploads/movies/${item.thumb_url}`}
-									alt={`Thumbnail ${index + 1}`}
-									className='w-full h-full object-cover rounded-lg'
-									width={900}
-									height={900}
-								/>
+					<div className='absolute bottom-28 w-full flex justify-center px-8 z-10'>
+						<div className='hidden lg:block'>
+							<div className='flex justify-center space-x-4 overflow-auto'>
+								{items?.map((item: any, index: any) => (
+									<div
+										key={index}
+										onClick={() => showSlider(index)}
+										className={`cursor-pointer flex-shrink-0 w-48 h-56 relative transition-all duration-500 ${
+											index === itemActive ? 'brightness-150' : 'brightness-50'
+										}`}
+									>
+										<span className='absolute top-1 left-1 px-2 py-1 text-sm bg-red-600 text-white rounded-md'>
+											Nổi bật
+										</span>
+										<Image
+											src={`https://img.ophim.live/uploads/movies/${item.thumb_url}`}
+											alt={`Thumbnail ${index + 1}`}
+											className='w-full h-full object-cover rounded-lg'
+											width={900}
+											height={900}
+										/>
+									</div>
+								))}
 							</div>
-						))}
+						</div>
+
+						<div className='lg:hidden'>
+							<Swiper
+								spaceBetween={10}
+								slidesPerView='auto'
+								loop={true}
+								centeredSlides={true}
+								className='w-full'
+							>
+								{items?.map((item: any, index: any) => (
+									<SwiperSlide key={index}>
+										<div
+											onClick={() => showSlider(index)}
+											className={`cursor-pointer relative transition-all duration-500 ${
+												index === itemActive ? 'brightness-150' : 'brightness-50'
+											}`}
+										>
+											<span className='absolute top-1 left-1 px-2 py-1 text-sm bg-red-600 text-white rounded-md'>
+												Nổi bật
+											</span>
+											<Image
+												src={`https://img.ophim.live/uploads/movies/${item.thumb_url}`}
+												alt={`Thumbnail ${index + 1}`}
+												className='w-full h-full object-cover rounded-lg'
+												width={900}
+												height={900}
+											/>
+										</div>
+									</SwiperSlide>
+								))}
+							</Swiper>
+						</div>
 					</div>
 				</div>
 			</div>

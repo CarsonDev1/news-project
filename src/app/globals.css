@@ -66,10 +66,28 @@
 
 .container {
 	width: 100%;
-	max-width: 1700px;
+	max-width: 127rem;
 	margin: 0 auto;
-	padding: 0 15px;
+	padding: 0 1.5rem;
 	position: relative;
+}
+
+.sec-com {
+	--padding-section: 4.8rem;
+	--padding-section-tl: 2.4rem;
+	--padding-section-mobile: 1.2rem;
+
+	padding: var(--padding-section) 0;
+}
+@media screen and (min-width: 1200px) {
+	.sec-com {
+		padding: var(--padding-section-tl) 0;
+	}
+}
+@media screen and (max-width: 576px) {
+	.sec-com {
+		padding: var(--padding-section-mobile) 0;
+	}
 }
 
 @layer base {

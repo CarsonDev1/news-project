@@ -1,53 +1,29 @@
+import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { FaPlay, FaList } from 'react-icons/fa';
+import { FaPlay, FaList, FaStar } from 'react-icons/fa';
+import { getMovies } from '@/api/movies/routes';
+import { getMovieSlug } from '@/api/movies/[slug]/route';
 
 const BannerSlide = () => {
 	const [itemActive, setItemActive] = useState<number>(0);
-	const items = [
-		{
-			img: '/img1.png',
-			title: 'Slider 01',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img2.jpg',
-			title: 'Slider 02',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img3.jpg',
-			title: 'Slider 03',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img4.jpg',
-			title: 'Slider 04',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img5.jpg',
-			title: 'Slider 05',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img5.jpg',
-			title: 'Slider 05',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img5.jpg',
-			title: 'Slider 05',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-		{
-			img: '/img5.jpg',
-			title: 'Slider 05',
-			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, neque? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ex.',
-		},
-	];
+	const [page, setPage] = useState<number>(1);
 
-	const countItem = items.length;
+	const {
+		data: moviesData,
+		isLoading,
+		isError,
+	} = useQuery({
+		queryKey: ['movies', page],
+		queryFn: () => getMovies(page),
+	});
+
+	const items = moviesData?.items
+		?.filter((item: any) => item.year)
+		?.sort((a: any, b: any) => b.year - a.year)
+		?.slice(0, 8);
+
+	const countItem = items?.length;
 
 	const next = () => {
 		setItemActive((prev) => (prev + 1) % countItem);
@@ -57,16 +33,41 @@ const BannerSlide = () => {
 		setItemActive((prev) => (prev - 1 + countItem) % countItem);
 	};
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			next();
-		}, 5000);
-		return () => clearInterval(interval);
-	}, [itemActive]);
-
 	const showSlider = (index: number) => {
 		setItemActive(index);
 	};
+
+	const {
+		data: movieDetails,
+		isLoading: movieLoading,
+		isError: movieError,
+	} = useQuery({
+		queryKey: ['movieDetails', items?.[itemActive]?.slug],
+		queryFn: () => getMovieSlug(items?.[itemActive]?.slug),
+		enabled: !!items?.[itemActive]?.slug,
+	});
+
+	useEffect(() => {
+		if (moviesData) {
+			const interval = setInterval(() => {
+				next();
+			}, 5000);
+
+			return () => clearInterval(interval);
+		}
+	}, [itemActive, moviesData]);
+
+	if (isLoading) {
+		return (
+			<div className='flex justify-center items-center h-96 w-full bg-black'>
+				<Image src='/loading.gif' width={200} height={200} alt='loading' className='object-contain' />
+			</div>
+		);
+	}
+
+	if (isError || movieError) {
+		return <div>Error fetching movie details</div>;
+	}
 
 	return (
 		<div>
@@ -75,7 +76,7 @@ const BannerSlide = () => {
 				<div className='relative h-dvh'>
 					{/* List of items */}
 					<div className='absolute inset-0'>
-						{items.map((item, index) => (
+						{items?.map((item: any, index: any) => (
 							<div
 								key={index}
 								className={`absolute inset-0 transition-opacity duration-500 ${
@@ -83,24 +84,37 @@ const BannerSlide = () => {
 								}`}
 							>
 								<Image
-									src={item.img}
+									src={`https://img.ophim.live/uploads/movies/${item.poster_url}`}
 									alt={`Slide ${index + 1}`}
 									className='w-full h-full object-cover'
-									width={2020}
-									height={2000}
+									fill
 									quality={100}
 								/>
 								<div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
 								<div className='absolute top-1/4 left-28 z-10 text-left space-y-4'>
-									<p className='uppercase tracking-widest'>Design</p>
-									<h2 className='text-6xl md:text-8xl font-bold'>{item.title}</h2>
-									<p>{item.text}</p>
+									<span className='px-3 py-1 text-xl bg-red-600 rounded-md'>
+										{movieDetails?.movie?.episode_total?.replace('Tập', '')} Tập
+									</span>
+									<h2 className='text-3xl md:text-5xl font-bold leading-3'>
+										{item.name} {item.tmdb.season && <span>(Season {item.tmdb.season})</span>}
+									</h2>
+									<p
+										className='w-[70rem] line-clamp-4'
+										dangerouslySetInnerHTML={{ __html: movieDetails?.movie?.content }}
+									/>
+									{item.tmdb.vote_average > 0 && (
+										<p className='flex items-center space-x-1'>
+											<FaStar key={index} className='text-yellow-500' />
+											<span className='text-xl'>{item.tmdb.vote_average}</span>
+										</p>
+									)}
+
 									<div className='flex space-x-4 mt-4'>
-										<button className='flex gap-3 items-center bg-white text-black font-bold py-2 px-4 rounded'>
+										<button className='flex gap-3 items-center bg-white text-black font-bold py-3 px-6 rounded'>
 											<FaPlay />
 											<span>Play</span>
 										</button>
-										<button className='flex gap-3 items-center bg-white/20 text-white font-bold py-2 px-4 rounded'>
+										<button className='flex gap-3 items-center bg-white/20 text-white font-bold py-3 px-6 rounded'>
 											<FaList /> My List
 										</button>
 									</div>
@@ -127,7 +141,7 @@ const BannerSlide = () => {
 
 					{/* Thumbnail */}
 					<div className='absolute bottom-28 w-full flex justify-center space-x-4 overflow-auto px-8 z-10'>
-						{items.map((item, index) => (
+						{items?.map((item: any, index: any) => (
 							<div
 								key={index}
 								onClick={() => showSlider(index)}
@@ -135,8 +149,11 @@ const BannerSlide = () => {
 									index === itemActive ? 'brightness-150' : 'brightness-50'
 								}`}
 							>
+								<span className='absolute top-1 left-1 px-2 py-1 text-sm bg-red-600 text-white rounded-md'>
+									Nổi bật
+								</span>
 								<Image
-									src={item.img}
+									src={`https://img.ophim.live/uploads/movies/${item.thumb_url}`}
 									alt={`Thumbnail ${index + 1}`}
 									className='w-full h-full object-cover rounded-lg'
 									width={900}

@@ -40,7 +40,7 @@ const HomePage = () => {
 
 	return (
 		<div className='min-h-screen bg-gray-100 font-sans'>
-			<BannerSlide moviesData={moviesData} movieDetails={movieDetails} />
+			<BannerSlide movieDetails={movieDetails} />
 			<main className='container-lg'>
 				<Categories />
 

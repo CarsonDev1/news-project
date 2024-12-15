@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -61,6 +62,7 @@ const BannerSlide = ({ movieDetails }: any) => {
 									fill
 									quality={100}
 								/>
+								<div className='absolute inset-0 bg-black/30 w-full h-full rounded-md'></div>
 								<div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
 								<div className='absolute top-1/4 left-4 sm:left-10 md:left-20 lg:left-32 z-10 flex flex-col justify-between h-72'>
 									<span className='px-3 py-1 text-sm sm:text-base md:text-xl bg-red-600 rounded-md w-fit'>

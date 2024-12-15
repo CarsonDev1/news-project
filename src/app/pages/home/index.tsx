@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React, { useState } from 'react';
-import Categories from './categories';
 import NewsFeed from './news-feed';
 import BannerSlide from '@/app/pages/home/banner-slide';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css';
 import { useQuery } from '@tanstack/react-query';
 import { getMovies } from '@/api/movies/routes';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css';
+import MostMovie from './categories';
 
 const HomePage = () => {
-	const [page, setPage] = useState<number>(1);
+	const [page] = useState<number>(1);
 	const {
 		data: moviesData,
 		isLoading,
@@ -24,8 +24,8 @@ const HomePage = () => {
 	const movieSlugs = moviesData?.items.map((movie: any) => movie.slug) || [];
 	const {
 		data: movieDetails,
-		isLoading: isMovieLoading,
-		isError: isMovieError,
+		// isLoading: isMovieLoading,
+		// isError: isMovieError,
 	} = useQuery({
 		queryKey: ['movieDetails', movieSlugs],
 		queryFn: async () => {
@@ -34,15 +34,22 @@ const HomePage = () => {
 		},
 		enabled: movieSlugs.length > 0,
 	});
-	const loadMoreMovie = () => {
-		setPage(page + 1);
-	};
+
+	if (isError) {
+		return;
+	}
 
 	return (
-		<div className='min-h-screen bg-gray-100 font-sans'>
-			<BannerSlide movieDetails={movieDetails} />
-			<main className='container-lg'>
-				<Categories />
+		<div className='min-h-screen bg-black font-sans'>
+			{isLoading ? (
+				<div className='flex justify-center items-center h-[60dvh]'>
+					<div className='animate-spin border-t-4 border-red-500 border-solid w-16 h-16 rounded-full'></div>
+				</div>
+			) : (
+				<BannerSlide movieDetails={movieDetails} />
+			)}
+			<main className='container'>
+				<MostMovie movieDetails={movieDetails} />
 
 				<NewsFeed />
 			</main>

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
 import { getMovies } from '@/api/movies/routes';
@@ -82,7 +84,7 @@ const SeriesList = () => {
 					</h2>
 
 					{/* Movie Grid for XL screens */}
-					<div className='hidden xl:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
+					<div className='hidden xl:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[55dvh]'>
 						{mostMovies?.map((movie: any) => (
 							<MovieCard key={movie.movie?._id} movie={movie.movie} />
 						))}

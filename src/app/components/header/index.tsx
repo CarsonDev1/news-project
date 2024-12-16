@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { FaSearch, FaBars, FaSun } from 'react-icons/fa';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { User } from 'lucide-react';
+import Link from 'next/link';
 
 const categories = ['TV Shows', 'Movies', 'Recently Added', 'My List'];
 
@@ -12,9 +13,11 @@ const Header: React.FC = () => {
 		<header className={`bg-black text-white py-4 px-6 shadow-md sticky top-0 z-50`}>
 			<div className='container flex justify-between items-center'>
 				<div className='flex items-center gap-10'>
-					<div className='flex items-center gap-2'>
-						<Image src='/logo.png' alt='Logo' className='h-12 w-auto' width={90} height={90} />
-					</div>
+					<Link href='/'>
+						<div className='flex items-center gap-2'>
+							<Image src='/logo.png' alt='Logo' className='h-12 w-auto' width={90} height={90} />
+						</div>
+					</Link>
 					<nav className='hidden lg:flex space-x-8'>
 						{categories.map((category, index) => (
 							<a key={index} href='#' className='hover:text-red-600 transition duration-300 text-lg'>

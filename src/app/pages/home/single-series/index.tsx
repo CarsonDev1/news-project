@@ -1,22 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react'; // Import Swiper components
-import 'swiper/css'; // Import Swiper styles
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 interface MovieDetailsProps {
 	movieDetails: any;
 }
 
-const MostMovie: React.FC<MovieDetailsProps> = ({ movieDetails }) => {
+const MovieSingle: React.FC<MovieDetailsProps> = ({ movieDetails }) => {
 	const mostMovies = movieDetails
-		?.filter((item: any) => item?.movie?.view)
-		.sort((a: any, b: any) => b.movie.view - a.movie.view)
+		?.filter((item: any) => item?.movie?.type === 'single')
+		.sort((a: any, b: any) => b.movie.year - a.movie.year)
 		?.slice(0, 10);
 
 	return (
 		<section className='sec-com'>
-			<h2 className='text-3xl font-bold mb-6 text-white border-b-2 border-red-600 pb-2'>Xem nhiều nhất</h2>
+			<h2 className='text-3xl font-bold mb-6 text-white border-b-2 border-red-600 pb-2'>Phim lẻ hay nhất</h2>
 
 			<div className='hidden xl:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
 				{mostMovies?.map((movie: any) => (
@@ -88,4 +88,4 @@ const MovieCard: React.FC<{ movie: any }> = ({ movie }) => (
 	</Link>
 );
 
-export default MostMovie;
+export default MovieSingle;

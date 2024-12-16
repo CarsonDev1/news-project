@@ -66,7 +66,9 @@ const BannerSlide = ({ movieDetails }: any) => {
 								<div className='absolute inset-0 bg-gradient-to-t from-black to-transparent' />
 								<div className='absolute top-1/4 left-4 sm:left-10 md:left-20 lg:left-32 z-10 flex flex-col justify-between h-72'>
 									<span className='px-3 py-1 text-sm sm:text-base md:text-xl bg-red-600 rounded-md w-fit'>
-										{item?.movie?.episode_total?.replace('Tập', '')} Tập
+										{item?.movie?.episode_total > 0
+											? `${item?.movie?.episode_total?.replace('Tập', '')} Tập`
+											: 'Đang cập nhật'}
 									</span>
 									<h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-6 md:leading-10'>
 										{item?.movie?.name}{' '}

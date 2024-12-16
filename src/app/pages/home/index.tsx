@@ -6,10 +6,12 @@ import BannerSlide from '@/app/pages/home/banner-slide';
 import { useQuery } from '@tanstack/react-query';
 import { getMovies } from '@/api/movies/routes';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
+import MostMovie from './categories';
+import MovieSeries from '@/app/pages/home/tv-series';
+import MovieSingle from '@/app/pages/home/single-series';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
-import MostMovie from './categories';
 
 const HomePage = () => {
 	const [page] = useState<number>(1);
@@ -50,8 +52,8 @@ const HomePage = () => {
 			)}
 			<main className='container'>
 				<MostMovie movieDetails={movieDetails} />
-
-				<NewsFeed />
+				<MovieSeries movieDetails={movieDetails} />
+				<MovieSingle movieDetails={movieDetails} />
 			</main>
 		</div>
 	);

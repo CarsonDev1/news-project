@@ -62,7 +62,10 @@ const ProductDetail = () => {
 						/>
 						<div className='flex flex-col gap-3 text-white'>
 							<h2 className='text-5xl'>{moviesData?.movie?.name}</h2>
-							<p>{moviesData?.movie?.content}</p>
+							<p
+								className='w-full line-clamp-3 text-sm sm:text-base md:text-lg'
+								dangerouslySetInnerHTML={{ __html: moviesData?.movie?.content }}
+							/>
 							<span>{moviesData?.movie?.origin_name}</span>
 							<Link href={`/product-list/${moviesData?.movie?.slug}/watch`}>
 								<Button className='w-fit'>Xem Phim</Button>

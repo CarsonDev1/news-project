@@ -9,10 +9,10 @@ type Props = {
 export const LoadingScreen = ({ style, title, heightSection }: Props) => {
 	return (
 		<>
-			<div className='loading-screen' style={style}>
+			<div className='loading-screen h-screen flex justify-center items-center w-full' style={style}>
 				<div className='overlay-loading-screen'></div>
 				<div className='container'>
-					<div className='loading-wr h-[50vh]' style={{ height: heightSection }}>
+					<div className='loading-wr' style={{ height: heightSection }}>
 						<div className='loading-main'>
 							<div className='loader'></div>
 							<div className='img-logo'>

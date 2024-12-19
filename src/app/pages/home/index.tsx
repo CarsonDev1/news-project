@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import React, { useState } from 'react';
-import NewsFeed from './news-feed';
+import React, { useState, useEffect } from 'react';
 import BannerSlide from '@/app/pages/home/banner-slide';
 import { useQuery } from '@tanstack/react-query';
 import { getMovies } from '@/api/movies/routes';
@@ -14,7 +12,9 @@ import 'swiper/css/pagination';
 import 'swiper/css';
 
 const HomePage = () => {
-	const [page] = useState<number>(1);
+	const [page, setPage] = useState<number>(1);
+	const [allMovies, setAllMovies] = useState<any[]>([]);
+
 	const {
 		data: moviesData,
 		isLoading,
@@ -23,12 +23,9 @@ const HomePage = () => {
 		queryKey: ['movies', page],
 		queryFn: () => getMovies(page),
 	});
-	const movieSlugs = moviesData?.items.map((movie: any) => movie.slug) || [];
-	const {
-		data: movieDetails,
-		// isLoading: isMovieLoading,
-		// isError: isMovieError,
-	} = useQuery({
+
+	const movieSlugs = allMovies?.map((movie: any) => movie.slug) || [];
+	const { data: movieDetails } = useQuery({
 		queryKey: ['movieDetails', movieSlugs],
 		queryFn: async () => {
 			const movieDetailsPromises = movieSlugs.map((slug: any) => getMovieSlug(slug));
@@ -37,8 +34,27 @@ const HomePage = () => {
 		enabled: movieSlugs.length > 0,
 	});
 
+	useEffect(() => {
+		if (moviesData?.items?.length) {
+			setAllMovies((prevMovies) => {
+				const newMovies = moviesData.items;
+				const uniqueMovies = [
+					...prevMovies,
+					...newMovies.filter(
+						(movie: any) => !prevMovies.some((existingMovie: any) => existingMovie.slug === movie.slug)
+					),
+				];
+				return uniqueMovies;
+			});
+		}
+
+		if (moviesData && moviesData.items.length > 0 && page < 5) {
+			setPage((prevPage) => prevPage + 1);
+		}
+	}, [moviesData]);
+
 	if (isError) {
-		return;
+		return <div>Error fetching movies.</div>;
 	}
 
 	return (

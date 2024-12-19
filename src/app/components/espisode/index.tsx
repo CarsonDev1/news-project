@@ -12,11 +12,11 @@ export default function EpisodeSelector({ moviesData }: any) {
 	return (
 		<div className='sec-com'>
 			<div className='container mx-auto space-y-4'>
-				<Accordion type='single' collapsible className='!border-none'>
+				<Accordion type='single' defaultValue='item-1' collapsible className='!border-none'>
 					<AccordionItem value='item-1' className='!border-none'>
-						<AccordionTrigger>
+						<AccordionTrigger className='justify-start items-center gap-3 text-white'>
 							{/* Header */}
-							<div className='flex items-center gap-2 text-white mb-4'>
+							<div className='flex items-center gap-2 text-white'>
 								<svg viewBox='0 0 24 24' className='w-5 h-5' fill='currentColor'>
 									<path d='M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z' />
 								</svg>

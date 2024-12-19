@@ -8,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 interface Params {
 	slug: string;
@@ -63,7 +65,7 @@ const ProductDetail = () => {
 						<div className='flex flex-col gap-3 text-white'>
 							<h2 className='text-5xl'>{moviesData?.movie?.name}</h2>
 							<p
-								className='w-full line-clamp-3 text-sm sm:text-base md:text-lg'
+								className='w-[90%] line-clamp-3 text-sm sm:text-base md:text-lg'
 								dangerouslySetInnerHTML={{ __html: moviesData?.movie?.content }}
 							/>
 							<span>{moviesData?.movie?.origin_name}</span>
@@ -74,6 +76,31 @@ const ProductDetail = () => {
 					</div>
 				</div>
 				<EpisodeSelector moviesData={moviesData} />
+				<div className='flex flex-col gap-1 text-white'>
+					<h2 className='text-xl text-white mb-2'>Thông Tin Phim</h2>
+					<div className='flex flex-col gap-3'>
+						<p className='text-sm sm:text-base'>
+							Ngày phát hành:{' '}
+							{moviesData?.movie?.created?.time
+								? format(new Date(moviesData.movie.created.time), 'dd/MM/yyyy', { locale: vi })
+								: 'Đang cập nhật'}
+						</p>
+						<p className='text-sm sm:text-base'>
+							Đạo diễn: {moviesData?.movie?.director?.[0] || 'Đang cập nhật'}
+						</p>
+						<p className='text-sm sm:text-base'>Thể loại: {moviesData?.movie?.category?.[0]?.name}</p>
+						<div className='flex flex-col gap-2'>
+							<span className='text-white'>Tóm tắt phim:</span>
+							<p
+								className='w-full text-sm sm:text-base'
+								dangerouslySetInnerHTML={{ __html: moviesData?.movie?.content }}
+							/>
+						</div>
+						<Link href={`/product-list/${moviesData?.movie?.slug}/watch`}>
+							<Button className='w-fit'>Xem Phim</Button>
+						</Link>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

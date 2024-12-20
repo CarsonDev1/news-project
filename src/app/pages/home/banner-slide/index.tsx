@@ -72,7 +72,7 @@ const BannerSlide = ({ movieDetails }: any) => {
 									</span>
 									<h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-6 md:leading-10'>
 										{item?.movie?.name}{' '}
-										{item?.movie?.tmdb.season && <span>(Season {item?.movie?.tmdb.season})</span>}
+										{/* {item?.movie?.tmdb.season && <span>(Season {item?.movie?.tmdb.season})</span>} */}
 									</h2>
 									<p
 										className='w-full sm:w-3/4 lg:w-2/3 line-clamp-3 text-sm sm:text-base md:text-lg'

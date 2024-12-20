@@ -11,7 +11,7 @@ export default function EpisodeSelector({ moviesData }: any) {
 
 	return (
 		<div className='sec-com'>
-			<div className='container mx-auto space-y-4'>
+			<div className='mx-auto space-y-4'>
 				<Accordion type='single' defaultValue='item-1' collapsible className='!border-none'>
 					<AccordionItem value='item-1' className='!border-none'>
 						<AccordionTrigger className='justify-start items-center gap-3 text-white'>
@@ -77,7 +77,7 @@ export default function EpisodeSelector({ moviesData }: any) {
                 transition-colors duration-200 text-sm
               `}
 									>
-										Tập {ep?.name?.toString().padStart(2, '0')}
+										{ep?.name ? ep.name.toString().padStart(2, '0') : 'Đang cập nhật'}
 									</button>
 								))}
 							</div>

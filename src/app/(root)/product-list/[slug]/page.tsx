@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
@@ -73,12 +74,20 @@ const ProductDetail = () => {
 								: 'Đang cập nhật'}
 						</p>
 						<p className='text-sm sm:text-base'>
-							Đạo diễn: {moviesData?.movie?.director?.[0] || 'Đang cập nhật'}
+							Đạo diễn:{' '}
+							{moviesData?.movie?.director?.map((director: any) => director).join(', ') ||
+								'Đang cập nhật'}
 						</p>
 						<p className='text-sm sm:text-base'>
-							Diễn viên: {moviesData?.movie?.actor?.[0] ? moviesData.movie.actor[0] : 'Đang cập nhật'}
+							Diễn viên:{' '}
+							{moviesData?.movie?.actor?.map((actor: any) => actor).join(', ') || 'Đang cập nhật'}
 						</p>
-						<p className='text-sm sm:text-base'>Thể loại: {moviesData?.movie?.category?.[0]?.name}</p>
+						<p className='text-sm sm:text-base'>
+							Thể loại: {moviesData?.movie?.category?.map((category: any) => category?.name).join(', ')}
+						</p>
+						<p className='text-sm sm:text-base'>
+							Quốc gia: {moviesData?.movie?.country?.map((country: any) => country.name).join(', ')}
+						</p>
 						<div className='flex flex-col gap-2'>
 							<span className='text-white'>Tóm tắt phim:</span>
 							<p

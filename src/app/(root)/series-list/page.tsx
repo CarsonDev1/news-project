@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
 import { getMovies } from '@/api/movies/routes';

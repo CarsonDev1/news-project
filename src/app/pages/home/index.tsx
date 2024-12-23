@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React, { useState, useEffect } from 'react';
 import BannerSlide from '@/app/pages/home/banner-slide';
@@ -51,7 +52,7 @@ const HomePage = () => {
 		if (moviesData && moviesData.items.length > 0 && page < 5) {
 			setPage((prevPage) => prevPage + 1);
 		}
-	}, [moviesData]);
+	}, [moviesData, page]);
 
 	if (isError) {
 		return <div>Error fetching movies.</div>;

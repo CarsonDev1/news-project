@@ -30,6 +30,10 @@ const ProductDetail = () => {
 		queryFn: () => getMovieSlug(slug),
 	});
 
+	const dataEpisodes = moviesData?.episodes?.[0]?.server_data?.[0];
+
+	console.log('dataEpisodes', dataEpisodes);
+
 	return (
 		<div className='bg-black sec-com'>
 			<div className='container'>
@@ -57,7 +61,12 @@ const ProductDetail = () => {
 								dangerouslySetInnerHTML={{ __html: moviesData?.movie?.content }}
 							/>
 							<span>{moviesData?.movie?.origin_name}</span>
-							<Link href={`/product-list/${moviesData?.movie?.slug}/watch`}>
+							<Link
+								href={{
+									pathname: `/product-list/${moviesData?.movie?.slug}/watch`,
+									query: { episode: dataEpisodes?.name, link: dataEpisodes?.link_embed },
+								}}
+							>
 								<Button className='w-fit'>Xem Phim</Button>
 							</Link>
 						</div>

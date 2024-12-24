@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'; // Error components must be Client Components
 
-import { Title } from '@radix-ui/react-dialog';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -19,7 +18,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
 					<div className='img-inner'>
 						<Image src={'/assets/images/500-err.png'} alt='500 error' width={500} height={500}></Image>
 					</div>
-					<Title className='empty-title'>Đã có lỗi xảy ra</Title>
+					<h3 className='empty-title'>Đã có lỗi xảy ra</h3>
 					<div className='flex justify-center items-center'>
 						<Link
 							href='/'

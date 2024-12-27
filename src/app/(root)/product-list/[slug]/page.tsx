@@ -32,8 +32,6 @@ const ProductDetail = () => {
 
 	const dataEpisodes = moviesData?.episodes?.[0]?.server_data?.[0];
 
-	console.log('dataEpisodes', dataEpisodes);
-
 	return (
 		<div className='bg-black sec-com'>
 			<div className='container'>

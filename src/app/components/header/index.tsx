@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FaSearch, FaBars, FaSun } from 'react-icons/fa';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -9,8 +9,25 @@ import Link from 'next/link';
 const categories = ['TV Shows', 'Movies', 'Recently Added', 'My List'];
 
 const Header: React.FC = () => {
+	const [isSticky, setIsSticky] = useState(false);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			setIsSticky(window.scrollY > 0);
+		};
+
+		window.addEventListener('scroll', handleScroll);
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
 	return (
-		<header className={`bg-black text-white py-4 px-6 shadow-md sticky top-0 z-50`}>
+		<header
+			className={`${
+				isSticky ? 'bg-[#0F0F0F] shadow-lg' : 'bg-transparent'
+			} text-white py-4 px-6 fixed w-full top-0 z-50 transition-all duration-300`}
+		>
 			<div className='container flex justify-between items-center'>
 				<div className='flex items-center gap-10'>
 					<Link href='/'>

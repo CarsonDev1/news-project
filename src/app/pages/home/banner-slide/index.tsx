@@ -12,10 +12,7 @@ import 'swiper/css';
 const BannerSlide = ({ movieDetails }: any) => {
 	const [itemActive, setItemActive] = useState<number>(0);
 
-	const items = movieDetails
-		?.filter((item: any) => item?.movie?.year)
-		?.sort((a: any, b: any) => b?.movie?.year - a?.movie.year)
-		?.slice(0, 5);
+	const items = movieDetails?.slice(0, 5);
 
 	const countItem = items?.length;
 
@@ -58,7 +55,7 @@ const BannerSlide = ({ movieDetails }: any) => {
 								<Image
 									src={item?.movie?.poster_url}
 									alt={`Slide ${index + 1}`}
-									className='w-full h-full object-cover'
+									className='w-full object-cover'
 									fill
 									quality={100}
 								/>
@@ -72,7 +69,6 @@ const BannerSlide = ({ movieDetails }: any) => {
 									</span>
 									<h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-6 md:leading-10'>
 										{item?.movie?.name}{' '}
-										{/* {item?.movie?.tmdb.season && <span>(Season {item?.movie?.tmdb.season})</span>} */}
 									</h2>
 									<p
 										className='w-full sm:w-3/4 lg:w-2/3 line-clamp-3 text-sm sm:text-base md:text-lg'
@@ -85,9 +81,6 @@ const BannerSlide = ({ movieDetails }: any) => {
 												<span>{item?.movie?.tmdb.vote_average?.toFixed(1)}</span>
 											</p>
 										)}
-										<span className='text-sm sm:text-base font-bold text-yellow-400'>
-											{item?.movie?.view} lượt xem
-										</span>
 									</div>
 									<div className='flex space-x-4 mt-4'>
 										<Link href={`/product-list/${item?.movie?.slug}`} passHref>

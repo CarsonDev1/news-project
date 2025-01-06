@@ -5,9 +5,6 @@ import BannerSlide from '@/app/pages/home/banner-slide';
 import { useQuery } from '@tanstack/react-query';
 import { getMovies } from '@/api/movies/routes';
 import { getMovieSlug } from '@/api/movies/[slug]/route';
-import MostMovie from './categories';
-import MovieSeries from '@/app/pages/home/tv-series';
-import MovieSingle from '@/app/pages/home/single-series';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
@@ -49,7 +46,7 @@ const HomePage = () => {
 			});
 		}
 
-		if (moviesData && moviesData.items.length > 0 && page < 5) {
+		if (moviesData && moviesData.items.length > 0 && page < 1) {
 			setPage((prevPage) => prevPage + 1);
 		}
 	}, [moviesData, page]);
@@ -67,11 +64,12 @@ const HomePage = () => {
 			) : (
 				<BannerSlide movieDetails={movieDetails} />
 			)}
-			<main className='container'>
+
+			{/* <main className='container'>
 				<MostMovie movieDetails={movieDetails} />
 				<MovieSeries movieDetails={movieDetails} />
 				<MovieSingle movieDetails={movieDetails} />
-			</main>
+			</main> */}
 		</div>
 	);
 };
